@@ -24,8 +24,8 @@ local function loadBloxNet(player)
     local Frame = Instance.new("Frame")
     Frame.Parent = ScreenGui
     Frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-    Frame.Size = UDim2.new(0, 500, 0, 400)
-    Frame.Position = UDim2.new(0.5, -250, 0.5, -200)
+    Frame.Size = UDim2.new(0, 500, 0, 450) -- Increased height to fit all elements properly
+    Frame.Position = UDim2.new(0.5, -250, 0.5, -225)
     Frame.Active = true
     Frame.Draggable = true
 
@@ -36,8 +36,8 @@ local function loadBloxNet(player)
     -- Taskbar (Inside the UI)
     local Taskbar = Instance.new("Frame")
     Taskbar.Parent = Frame
-    Taskbar.Size = UDim2.new(1, 0, 0.12, 0)
-    Taskbar.Position = UDim2.new(0, 0, 0.88, 0)
+    Taskbar.Size = UDim2.new(1, 0, 0.1, 0)
+    Taskbar.Position = UDim2.new(0, 0, 0.9, 0) -- Adjusted so it fits within the larger UI
     Taskbar.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 
     local TaskbarCorner = Instance.new("UICorner")
@@ -69,20 +69,20 @@ local function loadBloxNet(player)
     -- Title Label
     local TitleLabel = Instance.new("TextLabel")
     TitleLabel.Parent = Frame
-    TitleLabel.Size = UDim2.new(1, -20, 0.15, 0)
+    TitleLabel.Size = UDim2.new(1, -20, 0.12, 0)
     TitleLabel.Position = UDim2.new(0, 10, 0, 10)
     TitleLabel.BackgroundTransparency = 1
     TitleLabel.Text = "BloxNet - Web Search"
     TitleLabel.Font = Enum.Font.SourceSansBold
-    TitleLabel.TextSize = 26
+    TitleLabel.TextSize = 28
     TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     TitleLabel.TextWrapped = true
 
     -- Search Box
     local SearchBox = Instance.new("TextBox")
     SearchBox.Parent = Frame
-    SearchBox.Size = UDim2.new(1, -20, 0.15, 0)
-    SearchBox.Position = UDim2.new(0, 10, 0.18, 10)
+    SearchBox.Size = UDim2.new(1, -20, 0.12, 0)
+    SearchBox.Position = UDim2.new(0, 10, 0.15, 10)
     SearchBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     SearchBox.Text = "Search..."
     SearchBox.ClearTextOnFocus = true
@@ -94,7 +94,7 @@ local function loadBloxNet(player)
     local SearchButton = Instance.new("TextButton")
     SearchButton.Parent = Frame
     SearchButton.Size = UDim2.new(1, -20, 0.12, 0)
-    SearchButton.Position = UDim2.new(0, 10, 0.35, 10)
+    SearchButton.Position = UDim2.new(0, 10, 0.28, 10)
     SearchButton.BackgroundColor3 = Color3.fromRGB(100, 100, 255)
     SearchButton.Text = "Search"
     SearchButton.Font = Enum.Font.SourceSansBold
@@ -107,8 +107,8 @@ local function loadBloxNet(player)
     -- Results Label
     local ResultsLabel = Instance.new("TextLabel")
     ResultsLabel.Parent = Frame
-    ResultsLabel.Size = UDim2.new(1, -20, 0.5, 0)
-    ResultsLabel.Position = UDim2.new(0, 10, 0.52, 10)
+    ResultsLabel.Size = UDim2.new(1, -20, 0.45, 0) -- Adjusted height so it fits perfectly above the taskbar
+    ResultsLabel.Position = UDim2.new(0, 10, 0.42, 10)
     ResultsLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     ResultsLabel.Text = "Results will appear here..."
     ResultsLabel.Font = Enum.Font.SourceSans
