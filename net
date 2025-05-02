@@ -1,0 +1,155 @@
+local Players = game:GetService("Players")
+
+local searchDatabase = {
+    ["Roblox Basics"] = {
+        keywords = {"roblox", "how to play", "getting started"},
+        answers = {
+            ["How to play Roblox?"] = "Roblox is an online platform where users can play games created by others or make their own using Roblox Studio.",
+            ["What is Robux?"] = "Robux is Roblox's in-game currency used to purchase items, accessories, and premium game features."
+        }
+    },
+    ["Game Development"] = {
+        keywords = {"game making", "development", "studio"},
+        answers = {
+            ["How to create a game?"] = "Use Roblox Studio to design and script your own game. Start by exploring templates and tutorials!",
+            ["Best practices for game design?"] = "Plan your game mechanics first, optimize for performance, and make it engaging for players!"
+        }
+    }
+}
+
+local function loadBloxNet(player)
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Parent = player:WaitForChild("PlayerGui")
+
+    local Frame = Instance.new("Frame")
+    Frame.Parent = ScreenGui
+    Frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    Frame.Size = UDim2.new(0, 500, 0, 400)
+    Frame.Position = UDim2.new(0.5, -250, 0.5, -200)
+    Frame.Active = true
+    Frame.Draggable = true
+
+    local UICorner = Instance.new("UICorner")
+    UICorner.Parent = Frame
+    UICorner.CornerRadius = UDim.new(0, 20)
+
+    -- Taskbar (Inside the UI)
+    local Taskbar = Instance.new("Frame")
+    Taskbar.Parent = Frame
+    Taskbar.Size = UDim2.new(1, 0, 0.12, 0)
+    Taskbar.Position = UDim2.new(0, 0, 0.88, 0)
+    Taskbar.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+
+    local TaskbarCorner = Instance.new("UICorner")
+    TaskbarCorner.Parent = Taskbar
+    TaskbarCorner.CornerRadius = UDim.new(0, 15)
+
+    -- Taskbar Buttons
+    local buttonColors = {Color3.fromRGB(80, 170, 255), Color3.fromRGB(80, 255, 170), Color3.fromRGB(200, 100, 255)}
+    local buttonNames = {"Home", "Search", "About"}
+    local buttonActions = {function() ResultsLabel.Text = "Welcome to BloxNet!" end, function() end, function() ResultsLabel.Text = "BloxNet is a custom search tool for Roblox topics!" end}
+
+    for i = 1, 3 do
+        local Button = Instance.new("TextButton")
+        Button.Parent = Taskbar
+        Button.Size = UDim2.new(0.3, -10, 1, 0)
+        Button.Position = UDim2.new((i - 1) * 0.35, 10, 0, 0)
+        Button.BackgroundColor3 = buttonColors[i]
+        Button.Text = buttonNames[i]
+        Button.Font = Enum.Font.SourceSansBold
+        Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+        local ButtonCorner = Instance.new("UICorner")
+        ButtonCorner.Parent = Button
+        ButtonCorner.CornerRadius = UDim.new(0, 12)
+
+        Button.MouseButton1Click:Connect(buttonActions[i])
+    end
+
+    -- Title Label
+    local TitleLabel = Instance.new("TextLabel")
+    TitleLabel.Parent = Frame
+    TitleLabel.Size = UDim2.new(1, -20, 0.15, 0)
+    TitleLabel.Position = UDim2.new(0, 10, 0, 10)
+    TitleLabel.BackgroundTransparency = 1
+    TitleLabel.Text = "BloxNet - Web Search"
+    TitleLabel.Font = Enum.Font.SourceSansBold
+    TitleLabel.TextSize = 26
+    TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TitleLabel.TextWrapped = true
+
+    -- Search Box
+    local SearchBox = Instance.new("TextBox")
+    SearchBox.Parent = Frame
+    SearchBox.Size = UDim2.new(1, -20, 0.15, 0)
+    SearchBox.Position = UDim2.new(0, 10, 0.18, 10)
+    SearchBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    SearchBox.Text = "Search..."
+    SearchBox.ClearTextOnFocus = true
+    SearchBox.Font = Enum.Font.SourceSans
+    SearchBox.TextSize = 20
+    SearchBox.TextColor3 = Color3.fromRGB(0, 0, 0)
+
+    -- Search Button
+    local SearchButton = Instance.new("TextButton")
+    SearchButton.Parent = Frame
+    SearchButton.Size = UDim2.new(1, -20, 0.12, 0)
+    SearchButton.Position = UDim2.new(0, 10, 0.35, 10)
+    SearchButton.BackgroundColor3 = Color3.fromRGB(100, 100, 255)
+    SearchButton.Text = "Search"
+    SearchButton.Font = Enum.Font.SourceSansBold
+    SearchButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+    local SearchButtonCorner = Instance.new("UICorner")
+    SearchButtonCorner.Parent = SearchButton
+    SearchButtonCorner.CornerRadius = UDim.new(0, 12)
+
+    -- Results Label
+    local ResultsLabel = Instance.new("TextLabel")
+    ResultsLabel.Parent = Frame
+    ResultsLabel.Size = UDim2.new(1, -20, 0.5, 0)
+    ResultsLabel.Position = UDim2.new(0, 10, 0.52, 10)
+    ResultsLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    ResultsLabel.Text = "Results will appear here..."
+    ResultsLabel.Font = Enum.Font.SourceSans
+    ResultsLabel.TextSize = 18
+    ResultsLabel.TextWrapped = true
+    ResultsLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+
+    local ResultsLabelCorner = Instance.new("UICorner")
+    ResultsLabelCorner.Parent = ResultsLabel
+    ResultsLabelCorner.CornerRadius = UDim.new(0, 12)
+
+    -- Search Functionality
+    SearchButton.MouseButton1Click:Connect(function()
+        local query = string.lower(SearchBox.Text)
+        local foundAnswer = nil
+
+        for category, data in pairs(searchDatabase) do
+            for _, keyword in pairs(data.keywords) do
+                if string.find(query, keyword) then
+                    foundAnswer = data.answers[next(data.answers)]
+                    break
+                end
+            end
+            for question, answer in pairs(data.answers) do
+                if string.lower(query) == string.lower(question) then
+                    foundAnswer = answer
+                    break
+                end
+            end
+            if foundAnswer then break end
+        end
+
+        if foundAnswer then
+            ResultsLabel.Text = foundAnswer
+        else
+            ResultsLabel.Text = "No results found! Try different keywords."
+        end
+    end)
+end
+
+local player = Players.LocalPlayer
+if player then
+    loadBloxNet(player)
+end
